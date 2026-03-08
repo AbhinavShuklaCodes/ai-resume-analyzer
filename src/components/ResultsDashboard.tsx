@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
 import { ScoreCircle } from "@/components/ScoreCircle";
 import { ResumeAnalysis } from "@/types/analysis";
 import {
@@ -21,10 +22,7 @@ interface ResultsDashboardProps {
 
 const container = {
   hidden: { opacity: 0 },
-  show: {
-    opacity: 1,
-    transition: { staggerChildren: 0.1 },
-  },
+  show: { opacity: 1, transition: { staggerChildren: 0.1 } },
 };
 
 const item = {
@@ -49,6 +47,12 @@ export function ResultsDashboard({ analysis, jobRole }: ResultsDashboardProps) {
     doc.text(`ATS Score: ${analysis.atsScore}/100`, margin, y);
     y += 8;
     doc.text(`Skill Match: ${analysis.skillMatchPercentage}%`, margin, y);
+    y += 8;
+    doc.text(`Formatting: ${analysis.formattingScore ?? "N/A"}/100`, margin, y);
+    y += 8;
+    doc.text(`Experience: ${analysis.experienceScore ?? "N/A"}/100`, margin, y);
+    y += 8;
+    doc.text(`Keywords: ${analysis.keywordScore ?? "N/A"}/100`, margin, y);
     y += 12;
 
     doc.setFontSize(12);
@@ -84,49 +88,68 @@ export function ResultsDashboard({ analysis, jobRole }: ResultsDashboardProps) {
     doc.save("resume-analysis.pdf");
   };
 
+  const breakdownItems = [
+    { label: "Formatting Score", value: analysis.formattingScore ?? 0 },
+    { label: "Skills Match", value: analysis.skillMatchPercentage ?? 0 },
+    { label: "Experience Score", value: analysis.experienceScore ?? 0 },
+    { label: "Keyword Match", value: analysis.keywordScore ?? 0 },
+  ];
+
   return (
-    <motion.div
-      variants={container}
-      initial="hidden"
-      animate="show"
-      className="space-y-6"
-    >
+    <motion.div variants={container} initial="hidden" animate="show" className="space-y-6">
       {/* Scores */}
       <motion.div variants={item}>
-        <Card className="shadow-elevated">
-          <CardContent className="flex flex-wrap items-center justify-center gap-6 sm:gap-8 py-6 sm:py-8">
-            <ScoreCircle score={analysis.atsScore} label="ATS Score" size={110} />
-            <ScoreCircle score={analysis.skillMatchPercentage} label="Skill Match" size={110} />
-            <div className="flex flex-col items-center gap-2">
-              <Button onClick={downloadPdf} variant="outline" size="sm">
-                <Download className="mr-1.5 h-3.5 w-3.5" /> Download Report
-              </Button>
-            </div>
+        <Card className="shadow-elevated border-border/50">
+          <CardContent className="flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-10 py-8">
+            <ScoreCircle score={analysis.atsScore} label="ATS Score" size={120} />
+            <ScoreCircle score={analysis.skillMatchPercentage} label="Skill Match" size={120} />
+            <Button onClick={downloadPdf} variant="outline" size="sm" className="mt-2 sm:mt-0">
+              <Download className="mr-1.5 h-3.5 w-3.5" /> Download Report
+            </Button>
+          </CardContent>
+        </Card>
+      </motion.div>
+
+      {/* Score Breakdown */}
+      <motion.div variants={item}>
+        <Card className="shadow-card border-border/50">
+          <CardHeader className="pb-3">
+            <CardTitle className="flex items-center gap-2 text-base">
+              <Target className="h-4 w-4 text-primary" /> Score Breakdown
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {breakdownItems.map((b) => (
+              <div key={b.label} className="space-y-1.5">
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-muted-foreground">{b.label}</span>
+                  <span className="font-semibold">{b.value}%</span>
+                </div>
+                <Progress value={b.value} className="h-2" />
+              </div>
+            ))}
           </CardContent>
         </Card>
       </motion.div>
 
       {/* Summary */}
       <motion.div variants={item}>
-        <Card className="shadow-card">
+        <Card className="shadow-card border-border/50">
           <CardHeader className="pb-3">
             <CardTitle className="flex items-center gap-2 text-base">
               <FileText className="h-4 w-4 text-primary" /> Professional Summary
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-sm leading-relaxed text-muted-foreground">
-              {analysis.summary}
-            </p>
+            <p className="text-sm leading-relaxed text-muted-foreground">{analysis.summary}</p>
           </CardContent>
         </Card>
       </motion.div>
 
       {/* Grid */}
       <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
-        {/* Strengths */}
         <motion.div variants={item}>
-          <Card className="shadow-card h-full">
+          <Card className="shadow-card h-full border-border/50">
             <CardHeader className="pb-3">
               <CardTitle className="flex items-center gap-2 text-base">
                 <CheckCircle2 className="h-4 w-4 text-success" /> Strengths
@@ -145,9 +168,8 @@ export function ResultsDashboard({ analysis, jobRole }: ResultsDashboardProps) {
           </Card>
         </motion.div>
 
-        {/* Weaknesses */}
         <motion.div variants={item}>
-          <Card className="shadow-card h-full">
+          <Card className="shadow-card h-full border-border/50">
             <CardHeader className="pb-3">
               <CardTitle className="flex items-center gap-2 text-base">
                 <AlertTriangle className="h-4 w-4 text-warning" /> Weaknesses
@@ -166,9 +188,8 @@ export function ResultsDashboard({ analysis, jobRole }: ResultsDashboardProps) {
           </Card>
         </motion.div>
 
-        {/* Missing Skills */}
         <motion.div variants={item}>
-          <Card className="shadow-card h-full">
+          <Card className="shadow-card h-full border-border/50">
             <CardHeader className="pb-3">
               <CardTitle className="flex items-center gap-2 text-base">
                 <Target className="h-4 w-4 text-destructive" /> Missing Skills
@@ -177,18 +198,15 @@ export function ResultsDashboard({ analysis, jobRole }: ResultsDashboardProps) {
             <CardContent>
               <div className="flex flex-wrap gap-2">
                 {analysis.missingSkills.map((skill, i) => (
-                  <Badge key={i} variant="secondary" className="text-xs">
-                    {skill}
-                  </Badge>
+                  <Badge key={i} variant="secondary" className="text-xs">{skill}</Badge>
                 ))}
               </div>
             </CardContent>
           </Card>
         </motion.div>
 
-        {/* Suggestions */}
         <motion.div variants={item}>
-          <Card className="shadow-card h-full">
+          <Card className="shadow-card h-full border-border/50">
             <CardHeader className="pb-3">
               <CardTitle className="flex items-center gap-2 text-base">
                 <Lightbulb className="h-4 w-4 text-primary" /> Suggestions
