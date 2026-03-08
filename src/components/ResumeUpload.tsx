@@ -19,25 +19,61 @@ export function ResumeUpload({ onTextExtracted, resumeText }: ResumeUploadProps)
   const [isProcessing, setIsProcessing] = useState(false);
 
   const handleFile = useCallback(async (file: File) => {
-    if (file.type !== "application/pdf") {
-      toast.error("Please upload a PDF file");
-      return;
-    }
-    if (file.size > 20 * 1024 * 1024) {
-      toast.error("File must be under 20MB");
-      return;
-    }
-    try {
-      const text = await extractTextFromPdf(file);
-      if (!text.trim()) {
-        toast.error("Could not extract text from this PDF. Try pasting your resume instead.");
+    if (file.type === "application/pdf") {
+      if (file.size > 20 * 1024 * 1024) {
+        toast.error("File must be under 20MB");
         return;
       }
-      setFileName(file.name);
-      onTextExtracted(text);
-      toast.success("Resume uploaded successfully!");
-    } catch {
-      toast.error("Failed to parse PDF. Try pasting your resume text instead.");
+      try {
+        const text = await extractTextFromPdf(file);
+        if (!text.trim()) {
+          toast.error("Could not extract text from this PDF. Try pasting your resume instead.");
+          return;
+        }
+        setFileName(file.name);
+        onTextExtracted(text);
+        toast.success("Resume uploaded successfully!");
+      } catch {
+        toast.error("Failed to parse PDF. Try pasting your resume text instead.");
+      }
+    } else if (file.type.startsWith("image/")) {
+      if (file.size > 20 * 1024 * 1024) {
+        toast.error("File must be under 20MB");
+        return;
+      }
+      setIsProcessing(true);
+      try {
+        const reader = new FileReader();
+        const base64 = await new Promise<string>((resolve, reject) => {
+          reader.onload = () => {
+            const result = reader.result as string;
+            resolve(result.split(",")[1]);
+          };
+          reader.onerror = reject;
+          reader.readAsDataURL(file);
+        });
+
+        const { data, error } = await supabase.functions.invoke("extract-text-from-image", {
+          body: { imageBase64: base64, mimeType: file.type },
+        });
+
+        if (error) throw error;
+        if (data?.error) throw new Error(data.error);
+
+        if (!data.text?.trim()) {
+          toast.error("Could not extract text from this image. Try pasting your resume instead.");
+          return;
+        }
+        setFileName(file.name);
+        onTextExtracted(data.text);
+        toast.success("Text extracted from image successfully!");
+      } catch (err: any) {
+        toast.error(err.message || "Failed to extract text from image.");
+      } finally {
+        setIsProcessing(false);
+      }
+    } else {
+      toast.error("Please upload a PDF or image file");
     }
   }, [onTextExtracted]);
 
