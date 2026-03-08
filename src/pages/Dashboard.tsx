@@ -15,6 +15,7 @@ import {
   Clock,
   Target,
   LogOut,
+  Settings2,
   Trash2,
   Loader2,
   FileText,
