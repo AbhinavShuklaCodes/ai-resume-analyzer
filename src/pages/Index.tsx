@@ -51,7 +51,7 @@ export default function Index() {
   return (
     <div className="min-h-screen bg-background">
       {/* Hero */}
-      <header className="gradient-hero py-16 px-4 text-center">
+      <header className="gradient-hero py-10 sm:py-16 px-4 text-center">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
