@@ -100,6 +100,13 @@ export function ResumeUpload({ onTextExtracted, resumeText }: ResumeUploadProps)
           <Upload className="mr-1.5 h-3.5 w-3.5" /> Upload PDF
         </Button>
         <Button
+          variant={mode === "image" ? "default" : "outline"}
+          size="sm"
+          onClick={() => setMode("image")}
+        >
+          <Image className="mr-1.5 h-3.5 w-3.5" /> Upload Image
+        </Button>
+        <Button
           variant={mode === "paste" ? "default" : "outline"}
           size="sm"
           onClick={() => setMode("paste")}
