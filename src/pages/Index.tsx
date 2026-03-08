@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -7,6 +8,7 @@ import { ResumeUpload } from "@/components/ResumeUpload";
 import { ResultsDashboard } from "@/components/ResultsDashboard";
 import { AnalyzerLoader } from "@/components/AnalyzerLoader";
 import { DarkModeToggle } from "@/components/DarkModeToggle";
+import { useAuth } from "@/hooks/useAuth";
 import { ResumeAnalysis } from "@/types/analysis";
 import {
   Sparkles,
@@ -24,6 +26,9 @@ import {
   TrendingUp,
   Github,
   Mail,
+  User,
+  LogOut,
+  LayoutDashboard,
 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
