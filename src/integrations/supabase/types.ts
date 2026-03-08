@@ -14,7 +14,81 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          full_name: string | null
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          full_name?: string | null
+          id: string
+          updated_at?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          full_name?: string | null
+          id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      resume_analyses: {
+        Row: {
+          ats_score: number
+          created_at: string
+          experience_score: number | null
+          formatting_score: number | null
+          id: string
+          job_role: string
+          keyword_score: number | null
+          missing_skills: Json | null
+          skill_match_percentage: number
+          strengths: Json | null
+          suggestions: Json | null
+          summary: string | null
+          user_id: string
+          weaknesses: Json | null
+        }
+        Insert: {
+          ats_score: number
+          created_at?: string
+          experience_score?: number | null
+          formatting_score?: number | null
+          id?: string
+          job_role: string
+          keyword_score?: number | null
+          missing_skills?: Json | null
+          skill_match_percentage: number
+          strengths?: Json | null
+          suggestions?: Json | null
+          summary?: string | null
+          user_id: string
+          weaknesses?: Json | null
+        }
+        Update: {
+          ats_score?: number
+          created_at?: string
+          experience_score?: number | null
+          formatting_score?: number | null
+          id?: string
+          job_role?: string
+          keyword_score?: number | null
+          missing_skills?: Json | null
+          skill_match_percentage?: number
+          strengths?: Json | null
+          suggestions?: Json | null
+          summary?: string | null
+          user_id?: string
+          weaknesses?: Json | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
