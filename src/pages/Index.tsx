@@ -82,7 +82,7 @@ export default function Index() {
             <CardHeader>
               <CardTitle className="text-lg">Upload Your Resume</CardTitle>
               <CardDescription>
-                Upload a PDF or paste your resume text to get started
+                Upload a PDF, image, or paste your resume text to get started
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-5">
