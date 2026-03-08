@@ -118,8 +118,11 @@ export default function Dashboard() {
           </button>
           <div className="flex items-center gap-2">
             <DarkModeToggle />
-            <Button size="sm" variant="outline" onClick={handleSignOut}>
-              <LogOut className="mr-1.5 h-3.5 w-3.5" /> Sign Out
+            <Button size="sm" variant="outline" onClick={() => navigate("/settings")}>
+              <Settings2 className="mr-1.5 h-3.5 w-3.5" /> Settings
+            </Button>
+            <Button size="sm" variant="ghost" onClick={handleSignOut}>
+              <LogOut className="h-3.5 w-3.5" />
             </Button>
           </div>
         </div>
