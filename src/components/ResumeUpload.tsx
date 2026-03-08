@@ -1,10 +1,11 @@
 import { useState, useCallback } from "react";
-import { Upload, FileText, X } from "lucide-react";
+import { Upload, FileText, Image, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 import { extractTextFromPdf } from "@/lib/pdfParser";
+import { supabase } from "@/integrations/supabase/client";
 
 interface ResumeUploadProps {
   onTextExtracted: (text: string) => void;
