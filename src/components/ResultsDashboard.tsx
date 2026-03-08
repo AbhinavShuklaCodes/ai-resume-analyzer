@@ -123,7 +123,7 @@ export function ResultsDashboard({ analysis, jobRole }: ResultsDashboardProps) {
       </motion.div>
 
       {/* Grid */}
-      <div className="grid gap-4 md:grid-cols-2">
+      <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
         {/* Strengths */}
         <motion.div variants={item}>
           <Card className="shadow-card h-full">

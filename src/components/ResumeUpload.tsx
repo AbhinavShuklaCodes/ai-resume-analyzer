@@ -91,7 +91,7 @@ export function ResumeUpload({ onTextExtracted, resumeText }: ResumeUploadProps)
 
   return (
     <div className="space-y-4">
-      <div className="flex gap-2">
+      <div className="flex flex-wrap gap-2">
         <Button
           variant={mode === "upload" ? "default" : "outline"}
           size="sm"

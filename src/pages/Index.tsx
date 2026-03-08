@@ -71,7 +71,7 @@ export default function Index() {
         </motion.div>
       </header>
 
-      <main className="mx-auto max-w-4xl px-4 -mt-8 pb-16 space-y-8">
+      <main className="mx-auto max-w-4xl px-3 sm:px-4 -mt-6 sm:-mt-8 pb-12 sm:pb-16 space-y-6 sm:space-y-8">
         {/* Upload Card */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
