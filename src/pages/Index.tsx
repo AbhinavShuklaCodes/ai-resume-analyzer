@@ -61,7 +61,7 @@ export default function Index() {
           <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-primary/20 px-4 py-1.5 text-xs font-medium text-primary-foreground">
             <Zap className="h-3.5 w-3.5" /> Powered by AI
           </div>
-          <h1 className="text-4xl font-bold tracking-tight text-primary-foreground sm:text-5xl font-display">
+          <h1 className="text-3xl font-bold tracking-tight text-primary-foreground sm:text-5xl font-display">
             AI Resume Analyzer
           </h1>
           <p className="mt-3 text-base text-primary-foreground/70">
