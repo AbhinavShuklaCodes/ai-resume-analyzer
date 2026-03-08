@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -7,6 +8,7 @@ import { ResumeUpload } from "@/components/ResumeUpload";
 import { ResultsDashboard } from "@/components/ResultsDashboard";
 import { AnalyzerLoader } from "@/components/AnalyzerLoader";
 import { DarkModeToggle } from "@/components/DarkModeToggle";
+import { useAuth } from "@/hooks/useAuth";
 import { ResumeAnalysis } from "@/types/analysis";
 import {
   Sparkles,
@@ -24,6 +26,9 @@ import {
   TrendingUp,
   Github,
   Mail,
+  User,
+  LogOut,
+  LayoutDashboard,
 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
@@ -64,6 +69,8 @@ export default function Index() {
   const [jobRole, setJobRole] = useState("");
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysis, setAnalysis] = useState<ResumeAnalysis | null>(null);
+  const { user, signOut } = useAuth();
+  const navigate = useNavigate();
   const analyzerRef = useRef<HTMLDivElement>(null);
 
   const scrollToAnalyzer = () => {
@@ -91,7 +98,27 @@ export default function Index() {
       if (error) throw error;
       if (data?.error) throw new Error(data.error);
 
-      setAnalysis(data as ResumeAnalysis);
+      const analysisData = data as ResumeAnalysis;
+      setAnalysis(analysisData);
+
+      // Save to DB if user is logged in
+      if (user) {
+        await supabase.from("resume_analyses").insert({
+          user_id: user.id,
+          job_role: jobRole.trim(),
+          ats_score: analysisData.atsScore,
+          skill_match_percentage: analysisData.skillMatchPercentage,
+          formatting_score: analysisData.formattingScore,
+          experience_score: analysisData.experienceScore,
+          keyword_score: analysisData.keywordScore,
+          missing_skills: analysisData.missingSkills,
+          strengths: analysisData.strengths,
+          weaknesses: analysisData.weaknesses,
+          suggestions: analysisData.suggestions,
+          summary: analysisData.summary,
+        });
+      }
+
       toast.success("Analysis complete!");
     } catch (err: any) {
       console.error(err);
@@ -119,9 +146,25 @@ export default function Index() {
           </div>
           <div className="flex items-center gap-2">
             <DarkModeToggle />
-            <Button size="sm" onClick={scrollToAnalyzer} className="gradient-primary text-primary-foreground">
-              Get Started
-            </Button>
+            {user ? (
+              <>
+                <Button size="sm" variant="outline" onClick={() => navigate("/dashboard")}>
+                  <LayoutDashboard className="mr-1.5 h-3.5 w-3.5" /> Dashboard
+                </Button>
+                <Button size="sm" variant="ghost" onClick={signOut}>
+                  <LogOut className="h-3.5 w-3.5" />
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button size="sm" variant="outline" onClick={() => navigate("/auth")}>
+                  Sign In
+                </Button>
+                <Button size="sm" onClick={scrollToAnalyzer} className="gradient-primary text-primary-foreground">
+                  Get Started
+                </Button>
+              </>
+            )}
           </div>
         </div>
       </nav>
