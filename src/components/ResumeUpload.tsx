@@ -116,9 +116,9 @@ export function ResumeUpload({ onTextExtracted, resumeText }: ResumeUploadProps)
       </div>
 
       <AnimatePresence mode="wait">
-        {mode === "upload" ? (
+        {(mode === "upload" || mode === "image") ? (
           <motion.div
-            key="upload"
+            key={mode}
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
@@ -126,7 +126,11 @@ export function ResumeUpload({ onTextExtracted, resumeText }: ResumeUploadProps)
           >
             {fileName ? (
               <div className="flex items-center gap-3 rounded-lg border border-primary/30 bg-accent p-4">
-                <FileText className="h-8 w-8 text-primary" />
+                {mode === "image" ? (
+                  <Image className="h-8 w-8 text-primary" />
+                ) : (
+                  <FileText className="h-8 w-8 text-primary" />
+                )}
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium truncate">{fileName}</p>
                   <p className="text-xs text-muted-foreground">
@@ -149,19 +153,40 @@ export function ResumeUpload({ onTextExtracted, resumeText }: ResumeUploadProps)
                 onDrop={handleDrop}
                 onClick={() => document.getElementById("resume-file-input")?.click()}
               >
-                <div className="rounded-full bg-accent p-3">
-                  <Upload className="h-6 w-6 text-primary" />
-                </div>
-                <div className="text-center">
-                  <p className="text-sm font-medium">
-                    Drop your resume here or <span className="text-primary">browse</span>
-                  </p>
-                  <p className="text-xs text-muted-foreground mt-1">PDF files up to 20MB</p>
-                </div>
+                {isProcessing ? (
+                  <>
+                    <div className="rounded-full bg-accent p-3 animate-pulse">
+                      <Image className="h-6 w-6 text-primary" />
+                    </div>
+                    <p className="text-sm font-medium text-muted-foreground">
+                      Extracting text from image...
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <div className="rounded-full bg-accent p-3">
+                      {mode === "image" ? (
+                        <Image className="h-6 w-6 text-primary" />
+                      ) : (
+                        <Upload className="h-6 w-6 text-primary" />
+                      )}
+                    </div>
+                    <div className="text-center">
+                      <p className="text-sm font-medium">
+                        Drop your resume here or <span className="text-primary">browse</span>
+                      </p>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        {mode === "image"
+                          ? "PNG, JPG, WEBP images up to 20MB"
+                          : "PDF files up to 20MB"}
+                      </p>
+                    </div>
+                  </>
+                )}
                 <input
                   id="resume-file-input"
                   type="file"
-                  accept=".pdf"
+                  accept={mode === "image" ? "image/*" : ".pdf"}
                   className="hidden"
                   onChange={(e) => {
                     const file = e.target.files?.[0];
