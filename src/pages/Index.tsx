@@ -146,9 +146,25 @@ export default function Index() {
           </div>
           <div className="flex items-center gap-2">
             <DarkModeToggle />
-            <Button size="sm" onClick={scrollToAnalyzer} className="gradient-primary text-primary-foreground">
-              Get Started
-            </Button>
+            {user ? (
+              <>
+                <Button size="sm" variant="outline" onClick={() => navigate("/dashboard")}>
+                  <LayoutDashboard className="mr-1.5 h-3.5 w-3.5" /> Dashboard
+                </Button>
+                <Button size="sm" variant="ghost" onClick={signOut}>
+                  <LogOut className="h-3.5 w-3.5" />
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button size="sm" variant="outline" onClick={() => navigate("/auth")}>
+                  Sign In
+                </Button>
+                <Button size="sm" onClick={scrollToAnalyzer} className="gradient-primary text-primary-foreground">
+                  Get Started
+                </Button>
+              </>
+            )}
           </div>
         </div>
       </nav>
