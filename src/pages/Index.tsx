@@ -98,7 +98,27 @@ export default function Index() {
       if (error) throw error;
       if (data?.error) throw new Error(data.error);
 
-      setAnalysis(data as ResumeAnalysis);
+      const analysisData = data as ResumeAnalysis;
+      setAnalysis(analysisData);
+
+      // Save to DB if user is logged in
+      if (user) {
+        await supabase.from("resume_analyses").insert({
+          user_id: user.id,
+          job_role: jobRole.trim(),
+          ats_score: analysisData.atsScore,
+          skill_match_percentage: analysisData.skillMatchPercentage,
+          formatting_score: analysisData.formattingScore,
+          experience_score: analysisData.experienceScore,
+          keyword_score: analysisData.keywordScore,
+          missing_skills: analysisData.missingSkills,
+          strengths: analysisData.strengths,
+          weaknesses: analysisData.weaknesses,
+          suggestions: analysisData.suggestions,
+          summary: analysisData.summary,
+        });
+      }
+
       toast.success("Analysis complete!");
     } catch (err: any) {
       console.error(err);
