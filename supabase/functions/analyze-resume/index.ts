@@ -28,12 +28,22 @@ You MUST respond with ONLY valid JSON, no markdown, no code blocks, just raw JSO
 {
   "atsScore": <number 0-100>,
   "skillMatchPercentage": <number 0-100>,
+  "formattingScore": <number 0-100>,
+  "experienceScore": <number 0-100>,
+  "keywordScore": <number 0-100>,
   "missingSkills": ["skill1", "skill2", ...],
   "strengths": ["strength1", "strength2", ...],
   "weaknesses": ["weakness1", "weakness2", ...],
   "suggestions": ["suggestion1", "suggestion2", ...],
   "summary": "A professional 2-3 sentence resume summary tailored for the role"
 }
+
+Score explanations:
+- atsScore: Overall ATS compatibility score
+- skillMatchPercentage: How well skills match the target role
+- formattingScore: Resume formatting and structure quality
+- experienceScore: Relevance and depth of experience for the role
+- keywordScore: Presence of important keywords for ATS systems
 
 Be specific, actionable, and honest in your analysis. Consider ATS keyword optimization, formatting, relevant experience, and skills alignment.`;
 
@@ -78,7 +88,6 @@ Be specific, actionable, and honest in your analysis. Consider ATS keyword optim
 
     if (!content) throw new Error("No response from AI");
 
-    // Parse the JSON response, stripping any markdown code blocks
     let cleaned = content.trim();
     if (cleaned.startsWith("```")) {
       cleaned = cleaned.replace(/^```(?:json)?\n?/, "").replace(/\n?```$/, "");
