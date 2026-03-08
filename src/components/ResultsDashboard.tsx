@@ -94,9 +94,9 @@ export function ResultsDashboard({ analysis, jobRole }: ResultsDashboardProps) {
       {/* Scores */}
       <motion.div variants={item}>
         <Card className="shadow-elevated">
-          <CardContent className="flex flex-wrap items-center justify-center gap-8 py-8">
-            <ScoreCircle score={analysis.atsScore} label="ATS Score" size={130} />
-            <ScoreCircle score={analysis.skillMatchPercentage} label="Skill Match" size={130} />
+          <CardContent className="flex flex-wrap items-center justify-center gap-6 sm:gap-8 py-6 sm:py-8">
+            <ScoreCircle score={analysis.atsScore} label="ATS Score" size={110} />
+            <ScoreCircle score={analysis.skillMatchPercentage} label="Skill Match" size={110} />
             <div className="flex flex-col items-center gap-2">
               <Button onClick={downloadPdf} variant="outline" size="sm">
                 <Download className="mr-1.5 h-3.5 w-3.5" /> Download Report
@@ -123,7 +123,7 @@ export function ResultsDashboard({ analysis, jobRole }: ResultsDashboardProps) {
       </motion.div>
 
       {/* Grid */}
-      <div className="grid gap-4 md:grid-cols-2">
+      <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
         {/* Strengths */}
         <motion.div variants={item}>
           <Card className="shadow-card h-full">

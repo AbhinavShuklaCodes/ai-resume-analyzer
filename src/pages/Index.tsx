@@ -51,7 +51,7 @@ export default function Index() {
   return (
     <div className="min-h-screen bg-background">
       {/* Hero */}
-      <header className="gradient-hero py-16 px-4 text-center">
+      <header className="gradient-hero py-10 sm:py-16 px-4 text-center">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -61,7 +61,7 @@ export default function Index() {
           <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-primary/20 px-4 py-1.5 text-xs font-medium text-primary-foreground">
             <Zap className="h-3.5 w-3.5" /> Powered by AI
           </div>
-          <h1 className="text-4xl font-bold tracking-tight text-primary-foreground sm:text-5xl font-display">
+          <h1 className="text-3xl font-bold tracking-tight text-primary-foreground sm:text-5xl font-display">
             AI Resume Analyzer
           </h1>
           <p className="mt-3 text-base text-primary-foreground/70">
@@ -71,7 +71,7 @@ export default function Index() {
         </motion.div>
       </header>
 
-      <main className="mx-auto max-w-4xl px-4 -mt-8 pb-16 space-y-8">
+      <main className="mx-auto max-w-4xl px-3 sm:px-4 -mt-6 sm:-mt-8 pb-12 sm:pb-16 space-y-6 sm:space-y-8">
         {/* Upload Card */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
