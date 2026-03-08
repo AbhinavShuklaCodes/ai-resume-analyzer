@@ -69,6 +69,8 @@ export default function Index() {
   const [jobRole, setJobRole] = useState("");
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysis, setAnalysis] = useState<ResumeAnalysis | null>(null);
+  const { user, signOut } = useAuth();
+  const navigate = useNavigate();
   const analyzerRef = useRef<HTMLDivElement>(null);
 
   const scrollToAnalyzer = () => {
