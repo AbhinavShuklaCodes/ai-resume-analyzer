@@ -15,7 +15,8 @@ interface ResumeUploadProps {
 export function ResumeUpload({ onTextExtracted, resumeText }: ResumeUploadProps) {
   const [fileName, setFileName] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState(false);
-  const [mode, setMode] = useState<"upload" | "paste">("upload");
+  const [mode, setMode] = useState<"upload" | "paste" | "image">("upload");
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const handleFile = useCallback(async (file: File) => {
     if (file.type !== "application/pdf") {
