@@ -22,7 +22,12 @@ serve(async (req) => {
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
 
-    const systemPrompt = `You are an expert ATS (Applicant Tracking System) resume analyzer and career advisor. Analyze the provided resume for the specified job role and return a detailed JSON analysis.
+    const systemPrompt = `You are an expert ATS (Applicant Tracking System) resume analyzer and career advisor.
+
+IMPORTANT: First, determine if the provided text is actually a resume/CV. A resume typically contains sections like: contact information, work experience, education, skills, certifications, or a professional summary. If the text is NOT a resume (e.g., it's an essay, article, random text, code, a story, or any other non-resume content), you MUST respond with ONLY this JSON:
+{"error": "NOT_A_RESUME", "message": "The uploaded content does not appear to be a resume. Please upload a valid resume or CV."}
+
+If it IS a valid resume, analyze it for the specified job role and return a detailed JSON analysis.
 
 You MUST respond with ONLY valid JSON, no markdown, no code blocks, just raw JSON with this exact structure:
 {
@@ -94,6 +99,14 @@ Be specific, actionable, and honest in your analysis. Consider ATS keyword optim
     }
 
     const analysis = JSON.parse(cleaned);
+
+    // Check if AI flagged it as not a resume
+    if (analysis.error === "NOT_A_RESUME") {
+      return new Response(JSON.stringify({ error: analysis.message || "The uploaded content does not appear to be a resume. Please upload a valid resume or CV." }), {
+        status: 422,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
 
     return new Response(JSON.stringify(analysis), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
